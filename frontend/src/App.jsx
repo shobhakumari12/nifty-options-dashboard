@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 function formatNumber(value) {
@@ -17,7 +17,19 @@ function formatPrice(value) {
 
   return Number(value).toFixed(2);
 }
+function calculateVolumePercentage(volume, maximumVolume) {
+  const currentVolume = Number(volume);
 
+  if (
+    volume == null ||
+    !Number.isFinite(currentVolume) ||
+    maximumVolume <= 0
+  ) {
+    return null;
+  }
+
+  return ((currentVolume / maximumVolume) * 100).toFixed(2);
+}
 function App() {
   const [options, setOptions] = useState([]);
   const [spotPrice, setSpotPrice] = useState(null);
@@ -151,6 +163,7 @@ function App() {
                       <td>{formatNumber(option.callOi)}</td>
 
                       {/* Call Volume: highlight the highest volume */}
+
                       <td
                         className={
                           Number(option.callVolume) === highestCallVolume &&
@@ -159,8 +172,22 @@ function App() {
                             : ""
                         }
                       >
-                        {formatNumber(option.callVolume)}
+                        <div className="volume-value">
+                          {formatNumber(option.callVolume)}
+                        </div>
+                        <div className="volume-percentage">
+                          {calculateVolumePercentage(
+                            option.callVolume,
+                            highestCallVolume
+                          ) !== null
+                            ? `${calculateVolumePercentage(
+                              option.callVolume,
+                              highestCallVolume
+                            )}%`
+                            : "—"}
+                        </div>
                       </td>
+
 
                       {/* Call LTP */}
                       <td className="call-ltp">
@@ -178,6 +205,7 @@ function App() {
                       </td>
 
                       {/* Put Volume: highlight the highest volume */}
+
                       <td
                         className={
                           Number(option.putVolume) === highestPutVolume &&
@@ -186,8 +214,22 @@ function App() {
                             : ""
                         }
                       >
-                        {formatNumber(option.putVolume)}
+                        <div className="volume-value">
+                          {formatNumber(option.putVolume)}
+                        </div>
+                        <div className="volume-percentage">
+                          {calculateVolumePercentage(
+                            option.putVolume,
+                            highestPutVolume
+                          ) !== null
+                            ? `${calculateVolumePercentage(
+                              option.putVolume,
+                              highestPutVolume
+                            )}%`
+                            : "—"}
+                        </div>
                       </td>
+
 
                       {/* Put OI */}
                       <td>{formatNumber(option.putOi)}</td>
