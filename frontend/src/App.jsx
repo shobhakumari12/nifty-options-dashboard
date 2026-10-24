@@ -45,6 +45,26 @@ function App() {
     ...options.map((option) => Number(option.putVolume) || 0)
   );
 
+
+  // ADD THE NEW CODE BELOW THIS LINE
+
+  const secondHighestCallVolume = [
+    ...new Set(
+      options
+        .map((option) => Number(option.callVolume) || 0)
+        .filter((volume) => volume < highestCallVolume)
+    ),
+  ].sort((a, b) => b - a)[0] ?? 0;
+
+  const secondHighestPutVolume = [
+    ...new Set(
+      options
+        .map((option) => Number(option.putVolume) || 0)
+        .filter((volume) => volume < highestPutVolume)
+    ),
+  ].sort((a, b) => b - a)[0] ?? 0;
+
+
   useEffect(() => {
     async function fetchOptions() {
       try {
@@ -166,16 +186,32 @@ function App() {
 
                       <td
                         className={
-                          Number(option.callVolume) === highestCallVolume &&
-                            highestCallVolume > 0
+                          highestCallVolume > 0 &&
+                            Number(option.callVolume) === highestCallVolume
                             ? "highest-volume"
-                            : ""
+                            : highestCallVolume > 0 &&
+                              Number(option.callVolume) === secondHighestCallVolume &&
+                              Number(calculateVolumePercentage(
+                                option.callVolume,
+                                highestCallVolume
+                              )) >= 75
+                              ? "second-highest-volume"
+                              : ""
                         }
                       >
                         <div className="volume-value">
                           {formatNumber(option.callVolume)}
                         </div>
-                        <div className="volume-percentage">
+
+                        <div
+                          className={`volume-percentage ${Number(calculateVolumePercentage(
+                            option.callVolume,
+                            highestCallVolume
+                          )) >= 75
+                            ? "high-percentage"
+                            : ""
+                            }`}
+                        >
                           {calculateVolumePercentage(
                             option.callVolume,
                             highestCallVolume
@@ -186,6 +222,7 @@ function App() {
                             )}%`
                             : "—"}
                         </div>
+
                       </td>
 
 
@@ -205,19 +242,34 @@ function App() {
                       </td>
 
                       {/* Put Volume: highlight the highest volume */}
-
                       <td
                         className={
-                          Number(option.putVolume) === highestPutVolume &&
-                            highestPutVolume > 0
+                          highestPutVolume > 0 &&
+                            Number(option.putVolume) === highestPutVolume
                             ? "highest-volume"
-                            : ""
+                            : highestPutVolume > 0 &&
+                              Number(option.putVolume) === secondHighestPutVolume &&
+                              Number(calculateVolumePercentage(
+                                option.putVolume,
+                                highestPutVolume
+                              )) >= 75
+                              ? "second-highest-volume"
+                              : ""
                         }
                       >
                         <div className="volume-value">
                           {formatNumber(option.putVolume)}
                         </div>
-                        <div className="volume-percentage">
+
+                        <div
+                          className={`volume-percentage ${Number(calculateVolumePercentage(
+                            option.putVolume,
+                            highestPutVolume
+                          )) >= 75
+                            ? "high-percentage"
+                            : ""
+                            }`}
+                        >
                           {calculateVolumePercentage(
                             option.putVolume,
                             highestPutVolume
@@ -229,6 +281,9 @@ function App() {
                             : "—"}
                         </div>
                       </td>
+
+
+
 
 
                       {/* Put OI */}

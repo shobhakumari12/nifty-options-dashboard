@@ -246,11 +246,13 @@ footer {
   font-size: 18px;
   line-height: 28px;
 }
+
 td.highest-volume {
   background-color: #2563eb;
   color: #ffffff;
   font-weight: 700;
 }
+
 .volume-value {
   font-weight: 600;
 }
@@ -263,4 +265,18 @@ td.highest-volume {
 
 .highest-volume .volume-percentage {
   color: #dbeafe;
+}
+
+.volume-percentage.high-percentage {
+  font-weight: 1000;
+  color: #24ed4c;
+}
+td.second-highest-volume {
+  background-color: #facc15;
+  color: #000000;
+  font-weight: 700;
+}
+
+.second-highest-volume .volume-percentage {
+  color: #000000;
 }
