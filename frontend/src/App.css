@@ -11,28 +11,28 @@ body {
 }
 
 .dashboard {
-  max-width: 1600px;
+  max-width: 1800px;
+  width: 100%;
   margin: 0 auto;
-  padding: 28px 20px;
+  padding: 12px 12px;
 }
 
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 12px;
 }
-
 h1 {
-  margin: 0 0 8px;
-  font-size: 30px;
+  margin: 0 0 3px;
+  font-size: 24px;
   color: #f8fafc;
 }
-
-.topbar p,
-.note {
+.topbar p {
+  margin: 0;
+  font-size: 14px;
   color: #94a3b8;
 }
 
@@ -47,14 +47,14 @@ h1 {
 .market-info {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .market-info > div {
-  padding: 18px;
+  padding: 10px 14px;
   border: 1px solid #263449;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #111a2c;
 }
 
@@ -65,31 +65,35 @@ h1 {
 
 .market-info h2 {
   color: #f8fafc;
-  font-size: 18px;
-  margin: 10px 0 0;
+  font-size: 16px;
+  margin: 5px 0 0;
 }
 
 .table-section {
   background: #111a2c;
-  padding: 22px;
+  padding: 12px;
   border: 1px solid #263449;
-  border-radius: 14px;
+  border-radius: 10px;
 }
 
 .table-section h2 {
-  margin-top: 0;
+  margin: 0 0 4px;
   color: #f8fafc;
+  font-size: 20px;
 }
-
 .note {
   font-size: 13px;
 }
 
 .table-wrapper {
-  overflow-x: auto;
+  height: 82vh;
+  overflow: auto;
   margin-top: 20px;
   border-radius: 8px;
+  position: relative;
 }
+
+
 
 table {
   width: 100%;
@@ -105,10 +109,25 @@ td {
   white-space: nowrap;
 }
 
-th {
+thead th {
+  position: sticky;
+  z-index: 10;
   background: #172338;
   color: #f8fafc;
   font-size: 13px;
+}
+
+/* First header row */
+thead tr:first-child th {
+  top: 0;
+  height: 54px;
+  z-index: 12;
+}
+
+/* Second header row */
+thead tr:nth-child(2) th {
+  top: 54px;
+  z-index: 11;
 }
 
 thead .call-heading {
@@ -279,4 +298,31 @@ td.second-highest-volume {
 
 .second-highest-volume .volume-percentage {
   color: #000000;
+}
+.view-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+
+.view-controls button {
+  padding: 7px 20px;
+  border: 1px solid #334155;
+  border-radius: 5px;
+  background: #172338;
+  color: #e5e7eb;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.view-controls button.active {
+  background: #f97316;
+  border-color: #f97316;
+  color: #ffffff;
+}
+
+.view-controls button:hover {
+  filter: brightness(1.15);
 }

@@ -36,6 +36,7 @@ function App() {
   const [status, setStatus] = useState("Connecting...");
   const [error, setError] = useState("");
   const [fetchedAt, setFetchedAt] = useState("");
+  const [viewMode, setViewMode] = useState("all");
 
   const highestCallVolume = Math.max(
     ...options.map((option) => Number(option.callVolume) || 0)
@@ -63,6 +64,32 @@ function App() {
         .filter((volume) => volume < highestPutVolume)
     ),
   ].sort((a, b) => b - a)[0] ?? 0;
+
+  const atmIndex =
+    options.length > 0 && spotPrice !== null
+      ? options.reduce((closestIndex, option, index) => {
+        const currentDistance = Math.abs(
+          Number(option.strikePrice) - Number(spotPrice)
+        );
+
+        const closestDistance = Math.abs(
+          Number(options[closestIndex].strikePrice) -
+          Number(spotPrice)
+        );
+
+        return currentDistance < closestDistance
+          ? index
+          : closestIndex;
+      }, 0)
+      : -1;
+
+  const displayedOptions =
+    viewMode === "atm" && atmIndex !== -1
+      ? options.slice(
+        Math.max(0, atmIndex - 10),
+        Math.min(options.length, atmIndex + 11)
+      )
+      : options;
 
 
   useEffect(() => {
@@ -140,10 +167,22 @@ function App() {
 
 
       <section className="table-section">
-        <h2>NIFTY Option Chain</h2>
-        <p className="note">
-          Upstox market data · Snapshot refreshes every 10 seconds
-        </p>
+        
+        <div className="view-controls">
+          <button
+            className={viewMode === "all" ? "active" : ""}
+            onClick={() => setViewMode("all")}
+          >
+            ALL
+          </button>
+
+          <button
+            className={viewMode === "atm" ? "active" : ""}
+            onClick={() => setViewMode("atm")}
+          >
+            ATM
+          </button>
+        </div>
 
         <div className="table-wrapper">
           <table>
@@ -167,14 +206,15 @@ function App() {
 
 
             <tbody>
-              {options.map((option, index) => {
-                const nextOption = options[index + 1];
+              {displayedOptions.map((option, index) => {
+                const nextOption = displayedOptions[index + 1];
 
                 const showSpotLine =
                   spotPrice !== null &&
+                  Number.isFinite(Number(spotPrice)) &&
                   nextOption &&
-                  spotPrice >= option.strikePrice &&
-                  spotPrice < nextOption.strikePrice;
+                  Number(spotPrice) >= Number(option.strikePrice) &&
+                  Number(spotPrice) < Number(nextOption.strikePrice);
 
                 return (
                   <React.Fragment key={option.strikePrice}>
